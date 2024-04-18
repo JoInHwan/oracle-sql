@@ -1,12 +1,12 @@
 package vo;
 
 public class Emp {
-	public int Empno;
-	public String Ename;
+	public int empNo;
+	public String ename;
 	public String job;
-	public int Mgr;
-	public String Hiredate;
-	public double Sal;
-	public double Comm;
-	public int Deptno;
+	public int mgr;
+	public String hiredate;
+	public double sal;
+	public double comm;
+	public int deptno;
 }

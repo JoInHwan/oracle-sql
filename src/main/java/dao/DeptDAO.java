@@ -6,7 +6,7 @@ import vo.Dept;
 public class DeptDAO {
 	// VO사용
 	public static ArrayList<Dept> selectDeptList()
-					throws Exception{
+						throws Exception{
 		// Dept의 배열과 같음
 		ArrayList<Dept>list = new ArrayList<>();
 		
@@ -15,16 +15,16 @@ public class DeptDAO {
 		
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		ResultSet rs = stmt.executeQuery() ;
+		
 		while(rs.next()) {
 			Dept d = new Dept();
-			d.deptNo = rs.getInt("deptNo");
-			d.dname = rs.getString("dname");
-			d.loc = rs.getString("loc");
+			d.setDeptNo(rs.getInt("deptNo"));
+			d.setDname(rs.getString("dname"));
+			d.setLoc(rs.getString("loc"));
 			list.add(d);			
-		}
-		
+		}   
 		conn.close();
-		return list;
+		return list; 
 	}
 	
 	// Map 사용

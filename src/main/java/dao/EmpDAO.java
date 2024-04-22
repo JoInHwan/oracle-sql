@@ -17,9 +17,9 @@ public class EmpDAO {
 		ResultSet rs = stmt.executeQuery() ;
 		while(rs.next()) {
 			Emp e = new Emp();
-			e.empNo = rs.getInt("empNo");
-			e.ename = rs.getString("ename");
-			e.sal = rs.getDouble("sal");
+			e.setEmpNo(rs.getInt("empNo"));
+			e.setEname(rs.getString("ename"));
+			e.setSal(rs.getDouble("sal"));
 			list.add(e);			
 		}
 		
@@ -51,7 +51,48 @@ public class EmpDAO {
 		}
 		return list;
 	}
-	
-	
+	// 중복을 제외한 DEPTNO 목록을 출력하는 메서드
+	public static ArrayList<Integer> selectDeptNoList() throws Exception {
+		ArrayList<Integer> list = new ArrayList<>();
+		
+		Connection conn = DBHelper.getConnection();
+		String sql = "SELECT DISTINCT deptno deptNo"
+				+ " FROM emp"
+				+ " WHERE deptno IS NOT NULL"
+				+ " ORDER BY deptno ASC";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			Integer i = rs.getInt("deptNo"); // 랩퍼타입과 기본타입간에 Auto Boxing
+			list.add(i);
+		}
+		
+		conn.close();
+		return list;
+	}
+	// DEPTNO 뒤에 부서별 인원 같이 조회하는 메서드
+		public static ArrayList<HashMap<String, Integer>> 
+					selectDeptNoCntList() throws Exception {
+			ArrayList<HashMap<String, Integer>> list = new ArrayList<>();
+			
+			Connection conn = DBHelper.getConnection();
+			// COUNT(*)의 *은 모든열이 아니고 rowid를 가르킨다
+			String sql = "SELECT deptno deptNo, COUNT(*) cnt" 
+					+ " FROM emp"
+					+ " WHERE deptno IS NOT NULL"
+					+ " GROUP BY deptno"
+					+ " ORDER BY deptno ASC";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				HashMap<String, Integer> m = new HashMap<>();
+				m.put("cnt", rs.getInt("cnt"));
+				m.put("deptNo", rs.getInt("deptNo")); 
+				list.add(m);
+			}
+			
+			conn.close();
+			return list; // 구현 후 수정
+		}
 	
 }
